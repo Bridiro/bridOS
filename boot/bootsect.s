@@ -28,7 +28,7 @@ load_kernel:
 	call print
 
 	mov $KERNEL_OFFSET, %bx
-	mov $2, %dh
+	mov $31, %dh
 	call disk_load	
 	mov $MSG_LOAD_DONE, %si
 	call print

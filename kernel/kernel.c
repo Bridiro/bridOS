@@ -1,8 +1,19 @@
+#include "../drivers/display.h"
+
 #define VIDEO_MEM 0xb8000
 
-int main(){
-	volatile unsigned char *vid = (unsigned char*) VIDEO_MEM;
+void print_string_kernel(char *string){
+	unsigned char *vidmem = (unsigned char*) VIDEO_MEM;
+	int i=0;
+	int offset=161;
+	while(string[i]!=0){
+		vidmem[offset] = string[i];
+		vidmem[offset+1] = WHITE_ON_BLACK;
+		i += 1;
+		offset += 2;
+	}
+}
 
-	vid[161]='X';
-	vid[162]=0x0f;
+int main(){
+	print_string_kernel("HELLO KERNEL!");	
 }
