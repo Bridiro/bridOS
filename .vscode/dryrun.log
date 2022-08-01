@@ -1,0 +1,12 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/alebridi/Scrivania/programmazione/OS/bridOS'
+as --64 -o boot/bootsect.o boot/bootsect.s
+ld -Ttext 0x7c00 --oformat binary -o boot/bootsect.bin boot/bootsect.o
+as --64 -o boot/kernel_entry.o boot/kernel_entry.s
+/usr/bin/gcc -ffreestanding -c kernel/kernel.c -o kernel/kernel.o
+ld -o kernel.bin -Ttext 0x1000 --oformat binary boot/kernel_entry.o kernel/kernel.o
+cat boot/bootsect.bin kernel.bin > os-image.bin
+qemu-system-x86_64 -fda os-image.bin
+rm boot/bootsect.o
+make: Leaving directory '/home/alebridi/Scrivania/programmazione/OS/bridOS'
+ 
