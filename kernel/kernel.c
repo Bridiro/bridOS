@@ -4,6 +4,6 @@
 
 int main(){
 	unsigned char *vidmem = (unsigned char*) VIDEO_MEM;
-
-	print_string("--Da kernel--");
+	
+	vidmem[0] = 'X';
 }
