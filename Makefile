@@ -1,7 +1,7 @@
 #  WILDCARDS
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
-OBJ = ${C_SOURCES:.c=.o}
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.o)
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 #  COMPILERS
 CC = /usr/bin/gcc
@@ -37,4 +37,4 @@ debug: os-image.bin kernel.elf
 	
 clean:
 	rm -rf *.bin *.o *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o
+	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o
