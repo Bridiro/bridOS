@@ -77,6 +77,7 @@ void start_kernel() {
     print_string("mem_free(ptr3)\n");
     print_dynamic_mem();
     print_nl();
+    
 
     print_string("> ");
 }
@@ -88,6 +89,7 @@ void execute_command(char *input) {
     }
     else if(compare_string(input, "CLEAR") == 0) {
         clear_screen();
+        print_string("> ");
     }
     else if(compare_string(input, "HELLOWORLD") == 0) {
         print_string("Hello World!!!\n> ");
