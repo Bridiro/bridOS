@@ -88,6 +88,7 @@ void clear_screen() {
         set_char_at_video_memory(' ', i * 2);
     }
     set_cursor(get_offset(0, 0));
+    print_string("> ");
 }
 
 void print_backspace() {
