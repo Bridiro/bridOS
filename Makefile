@@ -18,7 +18,7 @@ os-image.bin: boot/mbr.bin kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
-	qemu-system-i386 -fda $<
+	qemu-system-x86_64 -fda $<
 
 echo: os-image.bin
 	xxd $<
@@ -28,7 +28,7 @@ kernel.elf: boot/kernel_entry.o ${OBJ_FILES}
 	x86_64-linux-gnu-ld -m elf_i386 -o $@ -Ttext 0x1000 $^
 
 debug: os-image.bin kernel.elf
-	qemu-system-i386 -s -S -fda os-image.bin -d guest_errors,int &
+	qemu-system-x86_64 -s -S -fda os-image.bin -d guest_errors,int &
 	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
