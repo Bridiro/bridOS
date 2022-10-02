@@ -7,6 +7,9 @@
 #include "util.h"
 #include "mem.h"
 
+static char command[30];
+static char args[226];
+
 void* alloc(int n) {
     int *ptr = (int *) mem_alloc(n * sizeof(int));
     if (ptr == NULL_POINTER) {
@@ -83,20 +86,41 @@ void start_kernel() {
 }
 
 void execute_command(char *input) {
-    if (compare_string(input, "EXIT") == 0) {
+
+    int i=0, j=0;
+
+    command[0] = '\0';
+    args[0] = '\0';
+
+    while(input[i]!=' ') {
+        command[i] = input[i];
+        i++;
+    }
+
+    command[i] = '\0';
+
+    while(input[i]!='\0') {
+        args[j] = input[i];
+        i++;
+        j++;
+    }
+
+    args[j] = '\0';
+
+    if (compare_string(command, "EXIT") == 0) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");
     }
-    else if(compare_string(input, "CLEAR") == 0) {
+    else if(compare_string(command, "CLEAR") == 0) {
         clear_screen();
         print_string("> ");
     }
-    else if(compare_string(input, "HELLOWORLD") == 0) {
+    else if(compare_string(command, "HELLOWORLD") == 0) {
         print_string("Hello World!!!\n> ");
     }
     else {
         print_string("Unknown command: ");
-        print_string(input);
+        print_string(command);
         print_string("\n> ");
     }
 }
