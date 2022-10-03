@@ -85,6 +85,13 @@ static void keyboard_callback(registers_t *regs) {
             is_shifted = 0;
             break;
 
+        case KEY_TAB:
+            for(int i=0; i<4; i++) {
+                append(key_buffer, ' ');
+            }
+            print_string("    ");
+            break;
+
         default:
             char letter = curmap[(int) scancode];
             append(key_buffer, letter);
