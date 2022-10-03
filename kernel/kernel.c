@@ -107,15 +107,15 @@ void execute_command(char *input) {
 
     args[j] = '\0';
 
-    if (compare_string(command, "EXIT") == 0) {
+    if (compare_string(string_to_lowercase(command), "exit") == 0) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");
     }
-    else if(compare_string(command, "CLEAR") == 0) {
+    else if(compare_string(string_to_lowercase(command), "clear") == 0) {
         clear_screen();
         print_string("> ");
     }
-    else if(compare_string(command, "HELLOWORLD") == 0) {
+    else if(compare_string(string_to_lowercase(command), "helloworld") == 0) {
         print_string("Hello World!!!\n> ");
     }
     else {

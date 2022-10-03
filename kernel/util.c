@@ -55,3 +55,62 @@ int compare_string(char s1[], char s2[]) {
     }
     return s1[i] - s2[i];
 }
+
+char *string_to_lowercase(char *string) {
+    for(int i=0; i<string_length(string); i++){
+        if(string[i]=='A')
+            string[i]='a';
+        else if(string[i]=='B')
+            string[i]='b';
+        else if(string[i]=='C')
+            string[i]='c';
+        else if(string[i]=='D')
+            string[i]='d';
+        else if(string[i]=='E')
+            string[i]='e';
+        else if(string[i]=='F')
+            string[i]='f';
+        else if(string[i]=='G')
+            string[i]='g';
+        else if(string[i]=='H')
+            string[i]='h';
+        else if(string[i]=='I')
+            string[i]='i';
+        else if(string[i]=='J')
+            string[i]='j';
+        else if(string[i]=='K')
+            string[i]='k';
+        else if(string[i]=='L')
+            string[i]='l';
+        else if(string[i]=='M')
+            string[i]='m';
+        else if(string[i]=='N')
+            string[i]='n';
+        else if(string[i]=='O')
+            string[i]='o';
+        else if(string[i]=='P')
+            string[i]='p';
+        else if(string[i]=='Q')
+            string[i]='q';
+        else if(string[i]=='R')
+            string[i]='r';
+        else if(string[i]=='S')
+            string[i]='s';
+        else if(string[i]=='T')
+            string[i]='t';
+        else if(string[i]=='U')
+            string[i]='u';
+        else if(string[i]=='V')
+            string[i]='v';
+        else if(string[i]=='W')
+            string[i]='w';
+        else if(string[i]=='X')
+            string[i]='x';
+        else if(string[i]=='Y')
+            string[i]='y';
+        else if(string[i]=='Z')
+            string[i]='z';
+    }
+
+    return string;
+}
