@@ -98,6 +98,7 @@ void execute_command(char *input) {
     }
 
     command[i] = '\0';
+    i++;
 
     while(input[i]!='\0') {
         args[j] = input[i];
@@ -107,7 +108,7 @@ void execute_command(char *input) {
 
     args[j] = '\0';
 
-    if (compare_string(string_to_lowercase(command), "exit") == 0) {
+    if (compare_string(string_to_lowercase(command), "shutdown") == 0) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");
     }
@@ -115,8 +116,9 @@ void execute_command(char *input) {
         clear_screen();
         print_string("> ");
     }
-    else if(compare_string(string_to_lowercase(command), "helloworld") == 0) {
-        print_string("Hello World!!!\n> ");
+    else if(compare_string(string_to_lowercase(command), "echo") == 0) {
+        print_string(args);
+        print_string("\n> ");
     }
     else {
         print_string("Unknown command: ");
