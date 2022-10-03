@@ -6,27 +6,25 @@
 #include "../kernel/util.h"
 #include "../kernel/kernel.h"
 
-#define CODE_BREAK     0x80
+#define KEY_ESCAPE           0x1
+#define KEY_SPACE            0x39
+#define KEY_ENTER            0x1C
+#define KEY_BACKSPACE        0x0E
+#define KEY_TAB              0xF
+#define KEY_UPARROW          0x48
+#define KEY_DOWNARROW        0x50
+#define KEY_LEFTARROW        0x4B
+#define KEY_RIGHTARROW       0x4D
+#define KEY_PGUP             0x49
+#define KEY_PGDOWN           0x51
+#define EXTENDED             0xE0
+#define EXTENDED_2           0x2A
 
-#define KEY_ESCAPE     0x1
-#define KEY_SPACE      0x39
-#define KEY_ENTER      0x1C
-#define KEY_BACKSPACE  0x0E
-#define KEY_TAB        0xF
-#define KEY_UPARROW    0x48
-#define KEY_DOWNARROW  0x50
-#define KEY_LEFTARROW  0x4B
-#define KEY_RIGHTARROW 0x4D
-#define KEY_PGUP       0x49
-#define KEY_PGDOWN     0x51
-#define EXTENDED       0xE0
-#define EXTENDED_2     0x2A
-
-#define KEY_LSHIFT     0x2A
-#define KEY_RSHIFT     0x36
-#define KEY_CTRL       0x1D
-#define KEY_ALT        0x38
-#define KEY_ALTGR      0x39
+#define KEY_LSHIFT           0x2A
+#define KEY_RSHIFT           0x36
+#define KEY_CTRL             0x1D
+#define KEY_ALT              0x38
+#define KEY_ALTGR            0x39
 
 static char key_buffer[256];
 
@@ -79,16 +77,8 @@ static void keyboard_callback(registers_t *regs) {
             break;
 
         case KEY_LSHIFT:
-            is_shifted = 1;
-            break;
-            
         case KEY_RSHIFT:
             is_shifted = 1;
-            break;
-
-        case KEY_LSHIFT|CODE_BREAK:
-        case KEY_RSHIFT|CODE_BREAK:
-            is_shifted = 0;
             break;
 
         case KEY_ESCAPE:
