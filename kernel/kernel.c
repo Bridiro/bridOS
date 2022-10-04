@@ -10,7 +10,6 @@
 static char command[30];
 static char args[226];
 static char *p;
-static bool allocated = false;
 
 void* alloc(int n) {
     int *ptr = (int *) mem_alloc(n * sizeof(int));
@@ -60,7 +59,7 @@ void execute_command(char *input) {
     command[0] = '\0';
     args[0] = '\0';
 
-    while(input[i]!=' ') {
+    while(input[i]!=' ' && input[i]!='\0') {
         command[i] = input[i];
         i++;
     }
@@ -95,11 +94,10 @@ void execute_command(char *input) {
             for(int i=0; i<size; i++) {
                 p[i] = args[i];
             }
-            allocated=true;
-            print_string("Memory allocated!\n>");
+            print_string("Memory allocated!\n> ");
         }
         else {
-            print_string("Can't allocate less than 1 byte!\n>");
+            print_string("Can't allocate less than 1 byte!\n> ");
         }
     }
     else if(compare_string(string_to_lowercase(command), "allocated") == 0) {
@@ -112,11 +110,7 @@ void execute_command(char *input) {
             p[i] = '\0';
         }
         mem_free(p);
-        allocated=false;
-        if(p==NULL_POINTER)
-            print_string("Allocation cleared successfully!\n>");
-        else
-            print_string("Memory not cleared!\n>");
+        print_string("Allocation cleared successfully!\n> ");
     }
     else {
         print_string("Unknown command: ");
