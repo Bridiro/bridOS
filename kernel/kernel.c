@@ -9,6 +9,7 @@
 
 static char command[30];
 static char args[226];
+static char *p;
 
 void* alloc(int n) {
     int *ptr = (int *) mem_alloc(n * sizeof(int));
@@ -17,15 +18,15 @@ void* alloc(int n) {
     } else {
         // Get the elements of the array
         for (int i = 0; i < n; ++i) {
-//            ptr[i] = i + 1; // shorthand for *(ptr + i)
+            ptr[i] = i + 1; // shorthand for *(ptr + i)
         }
 
         for (int i = 0; i < n; ++i) {
-//            char str[256];
-//            int_to_string(ptr[i], str);
-//            print_string(str);
+            char str[256];
+            int_to_string(ptr[i], str);
+            print_string(str);
         }
-//        print_nl();
+        print_nl();
     }
     return ptr;
 }
@@ -43,9 +44,7 @@ void start_kernel() {
 
     print_string("Initializing dynamic memory.\n");
     init_dynamic_mem();
-
-    clear_screen();
-
+/*
     print_string("init_dynamic_mem()\n");
     print_dynamic_node_size();
     print_dynamic_mem();
@@ -81,7 +80,7 @@ void start_kernel() {
     print_dynamic_mem();
     print_nl();
     
-
+*/
     print_string("> ");
 }
 
@@ -119,6 +118,27 @@ void execute_command(char *input) {
     else if(compare_string(string_to_lowercase(command), "echo") == 0) {
         print_string(args);
         print_string("\n> ");
+    }
+    else if(compare_string(string_to_lowercase(command), "alloc") == 0) {
+        int size = string_length(args);
+        p = (char *) mem_alloc(sizeof(char) * size);
+        for(int i=0; i<size; i++) {
+            p[i] = args[i];
+        }
+        print_string("MEMORY ALLOCATED!\n\n>");
+    }
+    else if(compare_string(string_to_lowercase(command), "allocated") == 0) {
+        print_string(p);
+        print_string("\n>");
+    }
+    else if(compare_string(string_to_lowercase(command), "clearalloc") == 0) {
+        p[0] = '\0';
+        if(string_length(p)==0){
+            print_string("Allocation cleared successfully!\n>");
+        }
+        else {
+            print_string("Allocation not cleared!\n>");
+        }
     }
     else {
         print_string("Unknown command: ");
