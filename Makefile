@@ -32,7 +32,7 @@ debug: os-image.bin kernel.elf
 	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
-	x86_64-linux-gnu-gcc -fno-pie -g -m32 -ffreestanding -c $< -o $@ # -g for debugging
+	x86_64-linux-gnu-gcc -Wno-discarded-qualifiers -fno-pie -g -m32 -ffreestanding -c $< -o $@ # -g for debugging
 
 %.o: %.asm
 	nasm $< -f elf -o $@

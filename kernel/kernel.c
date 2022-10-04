@@ -10,6 +10,7 @@
 static char command[30];
 static char args[226];
 static char *p;
+static bool allocated = false;
 
 void* alloc(int n) {
     int *ptr = (int *) mem_alloc(n * sizeof(int));
@@ -44,49 +45,17 @@ void start_kernel() {
 
     print_string("Initializing dynamic memory.\n");
     init_dynamic_mem();
-/*
-    print_string("init_dynamic_mem()\n");
-    print_dynamic_node_size();
-    print_dynamic_mem();
-    print_nl();
 
-    int *ptr1 = alloc(5);
-    print_string("int *ptr1 = alloc(5)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    int *ptr2 = alloc(10);
-    print_string("int *ptr2 = alloc(10)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    mem_free(ptr1);
-    print_string("mem_free(ptr1)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    int *ptr3 = alloc(2);
-    print_string("int *ptr3 = alloc(2)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    mem_free(ptr2);
-    print_string("mem_free(ptr2)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    mem_free(ptr3);
-    print_string("mem_free(ptr3)\n");
-    print_dynamic_mem();
-    print_nl();
-    
-*/
     print_string("> ");
 }
 
 void execute_command(char *input) {
 
     int i=0, j=0;
+
+    for(int k=string_length(input); k<256; k++) {
+        input[k] = '\0';
+    }
 
     command[0] = '\0';
     args[0] = '\0';
@@ -121,24 +90,33 @@ void execute_command(char *input) {
     }
     else if(compare_string(string_to_lowercase(command), "alloc") == 0) {
         int size = string_length(args);
-        p = (char *) mem_alloc(sizeof(char) * size);
-        for(int i=0; i<size; i++) {
-            p[i] = args[i];
+        if(size>0){
+            p = (char *) mem_alloc(sizeof(char) * size);
+            for(int i=0; i<size; i++) {
+                p[i] = args[i];
+            }
+            allocated=true;
+            print_string("Memory allocated!\n>");
         }
-        print_string("MEMORY ALLOCATED!\n\n>");
+        else {
+            print_string("Can't allocate less than 1 byte!\n>");
+        }
     }
     else if(compare_string(string_to_lowercase(command), "allocated") == 0) {
         print_string(p);
         print_string("\n>");
     }
     else if(compare_string(string_to_lowercase(command), "clearalloc") == 0) {
-        p[0] = '\0';
-        if(string_length(p)==0){
+        int size = string_length(p);
+        for(int i=0; i<size; i++) {
+            p[i] = '\0';
+        }
+        mem_free(p);
+        allocated=false;
+        if(p==NULL_POINTER)
             print_string("Allocation cleared successfully!\n>");
-        }
-        else {
-            print_string("Allocation not cleared!\n>");
-        }
+        else
+            print_string("Memory not cleared!\n>");
     }
     else {
         print_string("Unknown command: ");
