@@ -9,6 +9,9 @@
 
 static char command[30];
 static char args[226];
+static char *filename[256];
+static char *filedata[256];
+static int nfile=-1;
 static char *p;
 
 void* alloc(int n) {
@@ -111,6 +114,23 @@ void execute_command(char *input) {
         }
         mem_free(p);
         print_string("Allocation cleared successfully!\n> ");
+    }
+    else if(compare_string(string_to_lowercase(command), "touch") == 0) {
+        int i;
+        nfile+=1;
+        filename[nfile] = (char *) mem_alloc(sizeof(char) * string_length(args));
+        for(i=0; i<string_length(args); i++) {
+            filename[nfile][i] = args[i];
+        }
+        filename[nfile][i] = '\0';
+        print_string("File created successfully!\n> ");
+    }
+    else if(compare_string(string_to_lowercase(command), "ls") == 0) {
+        for(int i=0; i<nfile+1; i++) {
+            print_string("\n");
+            print_string(filename[i]);
+        }
+        print_string("\n> ");
     }
     else {
         print_string("Unknown command: ");
