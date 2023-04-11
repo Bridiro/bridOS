@@ -26,6 +26,9 @@
 #define KEY_ALT              0x38
 #define KEY_ALTGR            0x39
 
+#define KEY_LSHIFT_RELEASE   0xAA
+#define KEY_RSHIFT_RELEASE   0xB6
+
 static char key_buffer[256];
 
 static int is_shifted = 0;
@@ -81,6 +84,19 @@ static void keyboard_callback(registers_t *regs) {
             is_shifted = 1;
             break;
 
+
+        /*
+            ----------------------------------- NOT WORKING -------------------------------------------
+        */
+        case KEY_LSHIFT_RELEASE:
+        case KEY_RSHIFT_RELEASE:
+            is_shifted = 0;
+            break;
+        /*
+            ----------------------------------- NOT WORKING -------------------------------------------
+        */
+
+
         case KEY_ESCAPE:
             is_shifted = 0;
             break;
@@ -93,6 +109,7 @@ static void keyboard_callback(registers_t *regs) {
             break;
 
         default:
+            char *number;
             char letter = curmap[(int) scancode];
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
