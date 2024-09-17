@@ -18,7 +18,7 @@ os-image.bin: boot/mbr.bin kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
-	qemu-system-x86_64 -fda $<
+	qemu-system-x86_64 -drive file=$<,format=raw,if=floppy
 
 echo: os-image.bin
 	xxd $<
