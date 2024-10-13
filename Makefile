@@ -34,7 +34,7 @@ echo: os-image.bin
 	xxd $<
 
 # only for debug
-$(BUILD_DIR)/kernel.elf: boot/kernel_entry.o ${OBJ_FILES}
+$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/boot/kernel_entry.o ${OBJ_FILES}
 	x86_64-linux-gnu-ld -m elf_i386 -o $@ -Ttext 0x1000 $^
 
 debug: os-image.bin $(BUILD_DIR)/kernel.elf
