@@ -1,5 +1,4 @@
-#include <stdint.h>
-#include <stdbool.h>
+#include "util.h"
 
 int string_length(char s[]) {
     int i = 0;

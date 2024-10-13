@@ -1,8 +1,4 @@
 #include "display.h"
-#include "ports.h"
-#include <stdint.h>
-#include "../kernel/mem.h"
-#include "../kernel/util.h"
 
 void set_cursor(int offset) {
     offset /= 2;
@@ -57,6 +53,9 @@ int scroll_ln(int offset) {
  * - handle illegal offset (print error message somewhere)
  */
 void print_string(char *string) {
+    if (string == 0) {
+        return;
+    }
     int offset = get_cursor();
     int i = 0;
     while (string[i] != 0) {

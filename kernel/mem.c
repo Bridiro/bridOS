@@ -1,8 +1,4 @@
-#include <stdbool.h>
-#include <stdint.h>
 #include "mem.h"
-#include "../drivers/display.h"
-#include "util.h"
 
 // http://www.sunshine2k.de/articles/coding/cmemalloc/cmemory.html#ch33
 
@@ -12,24 +8,6 @@ void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes) {
         *(dest + i) = *(source + i);
     }
 }
-
-/*
- * The following code is based on code licensed under MIT licence
- * and thus also licensed under MIT license I guess?
- * For further details, see http://www.sunshine2k.de/license.html.
- */
-#define DYNAMIC_MEM_TOTAL_SIZE 4*1024
-#define DYNAMIC_MEM_NODE_SIZE sizeof(dynamic_mem_node_t)
-
-typedef struct dynamic_mem_node {
-    uint32_t size;
-    bool used;
-    struct dynamic_mem_node *next;
-    struct dynamic_mem_node *prev;
-} dynamic_mem_node_t;
-
-static uint8_t dynamic_mem_area[DYNAMIC_MEM_TOTAL_SIZE];
-static dynamic_mem_node_t *dynamic_mem_start;
 
 void init_dynamic_mem() {
     dynamic_mem_start = (dynamic_mem_node_t *) dynamic_mem_area;
