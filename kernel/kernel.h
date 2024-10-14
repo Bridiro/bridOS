@@ -5,8 +5,5 @@
 #include "../cpu/timer.h"
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
-
 #include "util.h"
 #include "mem.h"
-
-void execute_command(char *input);

@@ -30,5 +30,4 @@ typedef struct {
 #define IDT_ENTRIES 256
 
 void set_idt_gate(int n, uint32_t handler);
-
 void load_idt();

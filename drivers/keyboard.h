@@ -5,7 +5,7 @@
 #include "../cpu/isr.h"
 #include "display.h"
 #include "../kernel/util.h"
-#include "../kernel/kernel.h"
+#include "../kernel/commands.h"
 
 #define KEY_ESCAPE          0x1
 #define KEY_SPACE           0x39
@@ -25,14 +25,14 @@
 #define KEY_RSHIFT          0x36
 #define KEY_CTRL            0x1D
 #define KEY_ALT             0x38
-#define KEY_ALTGR           0x39
+#define KEY_ALTGR           0xE038
 #define CAPSLOCK            0x3A
 
 #define KEY_LSHIFT_RELEASE  0xAA
 #define KEY_RSHIFT_RELEASE  0xB6
 #define KEY_CTRL_RELEASE    0x9D
 #define KEY_ALT_RELEASE     0xB8
-#define KEY_ALTGR_RELEASE   0xB8
+#define KEY_ALTGR_RELEASE   0xE0B8
 
 #define SC_MAX 57
 
