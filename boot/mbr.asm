@@ -25,7 +25,12 @@ load_kernel:
     call print16
     call print16_nl
 
-    mov bx, KERNEL_OFFSET ; Read from disk and store in 0x1000
+    ; Imposta la modalità VESA
+    mov ax, 0x0012                   ; Modalità VESA 640x480x256
+    int 0x10                        ; Chiamata BIOS per cambiare modalità
+
+    ; Carica il kernel
+    mov bx, KERNEL_OFFSET            ; Read from disk and store in 0x1000
     mov dh, 31
     mov dl, [BOOT_DRIVE]
     call disk_load
@@ -33,8 +38,6 @@ load_kernel:
 
 [bits 32]
 BEGIN_32BIT:
-    mov ebx, MSG_32BIT_MODE
-    call print32
     call KERNEL_OFFSET ; Give control to the kernel
     jmp $ ; Stay here when the kernel returns control to us (if ever)
 

@@ -7,3 +7,5 @@
 #include "../drivers/keyboard.h"
 #include "util.h"
 #include "mem.h"
+
+void start_kernel();

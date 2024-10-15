@@ -1,18 +1,27 @@
 #include "kernel.h"
 
+#define VIDEO_MEM 0xA0000
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
+void put_pixel(int x, int y, unsigned char color) {
+    unsigned char* video_buffer = (unsigned char*)VIDEO_MEM;
+    video_buffer[y * SCREEN_WIDTH + x] = color;
+}
+
+void fill_screen(unsigned char color) {
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+            put_pixel(x, y, color);
+        }
+    }
+}
+
 void start_kernel() {
-    clear_screen();
-    print_string("Installing interrupt service routines (ISRs).\n");
     isr_install();
-
-    print_string("Enabling external interrupts.\n");
     asm volatile("sti");
-
-    print_string("Initializing keyboard (IRQ 1).\n");
     init_keyboard();
-
-    print_string("Initializing dynamic memory.\n");
     init_dynamic_mem();
 
-    print_string("> ");
+    fill_screen(15);
 }
