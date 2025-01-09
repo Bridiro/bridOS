@@ -40,7 +40,7 @@ os-image.bin: $(BUILD_DIR)/boot/mbr.bin $(BUILD_DIR)/kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
-	qemu-system-x86_64 -drive file=$<,format=raw,if=floppy -vga virtio -display sdl,gl=on
+	qemu-system-x86_64 -drive file=$<,format=raw,if=floppy -vga virtio
 
 echo: os-image.bin
 	xxd $<

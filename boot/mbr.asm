@@ -1,6 +1,8 @@
 [org 0x7c00]
 KERNEL_OFFSET equ 0x1000 ; The same one we used when linking the kernel
 
+ModeInfoBlock equ 0x8000   ; Buffer for info on VESA mode
+
 mov [BOOT_DRIVE], dl ; Remember that the BIOS sets us the boot drive in 'dl' on boot
 mov bp, 0x9000
 mov sp, bp
@@ -25,16 +27,32 @@ load_kernel:
     call print16
     call print16_nl
 
-    ; Imposta la modalità VESA
-    mov ax, 0x0012                   ; Modalità VESA 640x480x256
-    int 0x10                        ; Chiamata BIOS per cambiare modalità
+    ; Set VESA mode
+    mov ax, 0x4F02                  ; VESA function to set mode
+    mov bx, 0x101                   ; Mode 640x480x256
+    int 0x10
+    jc vesa_fail
+
+    mov ax, 0x4F01                  ; VESA function to get info
+    mov cx, 0x101                   ; Mode 640x480x256
+    mov di, ModeInfoBlock           ; ModeInfoBlock buffer pointer
+    int 0x10
+    jc vesa_fail
+
+    mov eax, ModeInfoBlock
+    mov [0x110000], eax
 
     ; Carica il kernel
-    mov bx, KERNEL_OFFSET            ; Read from disk and store in 0x1000
+    mov bx, KERNEL_OFFSET           ; Read from disk and store in 0x1000
     mov dh, 31
     mov dl, [BOOT_DRIVE]
     call disk_load
     ret
+
+vesa_fail:
+    mov bx, MSG_VESA_FAIL
+    call print16
+    hlt
 
 [bits 32]
 BEGIN_32BIT:
@@ -46,6 +64,7 @@ BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get o
 MSG_16BIT_MODE db "Started in 16-bit Real Mode", 0
 MSG_32BIT_MODE db "Landed in 32-bit Protected Mode", 0
 MSG_LOAD_KERNEL db "Loading kernel into memory", 0
+MSG_VESA_FAIL db "Failed to set VESA", 0
 
 ; padding
 times 510 - ($-$$) db 0
