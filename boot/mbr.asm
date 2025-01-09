@@ -29,12 +29,12 @@ load_kernel:
 
     ; Set VESA mode
     mov ax, 0x4F02                  ; VESA function to set mode
-    mov bx, 0x101                   ; Mode 640x480x256
+    mov bx, 0x118 | 0x4000          ; Mode 1024x768x32-bit
     int 0x10
     jc vesa_fail
 
     mov ax, 0x4F01                  ; VESA function to get info
-    mov cx, 0x101                   ; Mode 640x480x256
+    mov cx, 0x118                   ; Mode 1024x768x32-bit
     mov di, ModeInfoBlock           ; ModeInfoBlock buffer pointer
     int 0x10
     jc vesa_fail

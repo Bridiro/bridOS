@@ -1,4 +1,5 @@
 #include "kernel.h"
+#include <stdint.h>
 
 #define MODE_INFO_BLOCK_ADDRESS ((ModeInfoBlock*)0x8000)
 
@@ -25,20 +26,31 @@ typedef struct {
     uint8_t reserved[206];
 } ModeInfoBlock;
 
-void put_pixel(ModeInfoBlock* mode_info, int x, int y, uint8_t color) {
-    uint8_t* framebuffer = (uint8_t*)mode_info->framebuffer;
-    framebuffer[y * mode_info->pitch + x] = color;
+void put_pixel(ModeInfoBlock* mode_info, int x, int y, uint32_t color) {
+    /*
+    uint8_t* framebuffer = (uint8_t*)(uintptr_t)mode_info->framebuffer;
+
+    uint32_t offset = y * mode_info->pitch + x * 4;
+
+    framebuffer[offset + 0] = (color & 0xFF);        // Componente blu
+    framebuffer[offset + 1] = (color >> 8) & 0xFF;  // Componente verde
+    framebuffer[offset + 2] = (color >> 16) & 0xFF; // Componente rosso
+    framebuffer[offset + 3] = (color >> 24) & 0xFF;
+    */
+
+    uint32_t* framebuffer = (uint32_t*)(uintptr_t)mode_info->framebuffer;
+    framebuffer[y * (mode_info->pitch/4) + x] = color;
 }
 
-void draw_rectangle(ModeInfoBlock* mode_info, int x, int y, int w, int h, uint8_t color) {
+void draw_rectangle(ModeInfoBlock* mode_info, int x, int y, int w, int h, uint32_t color) {
     for (int dy = y; dy < y + h; dy++) {
-        for (int dx = x; dx < w + w; dx++) {
+        for (int dx = x; dx < x + w; dx++) {
             put_pixel(mode_info, dx, dy, color);
         }
     }
 }
 
-void fill_screen(ModeInfoBlock* mode_info, uint8_t color) {
+void fill_screen(ModeInfoBlock* mode_info, uint32_t color) {
     for (int y = 0; y < mode_info->height; y++) {
         for (int x = 0; x < mode_info->width; x++) {
             put_pixel(mode_info, x, y, color);
@@ -54,6 +66,6 @@ void start_kernel() {
 
     ModeInfoBlock* mode_info = MODE_INFO_BLOCK_ADDRESS;
 
-    fill_screen(mode_info, 0x4);
-    draw_rectangle(mode_info, 100, 100, 100, 100, 0xf);
+    fill_screen(mode_info, 0x00ff00ff);
+    draw_rectangle(mode_info, 100, 100, 100, 100, 0xffffffff);
 }
