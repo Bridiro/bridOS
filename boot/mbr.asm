@@ -27,6 +27,12 @@ load_kernel:
     call print16
     call print16_nl
 
+    ; Carica il kernel
+    mov bx, KERNEL_OFFSET           ; Read from disk and store in 0x1000
+    mov dh, 52
+    mov dl, [BOOT_DRIVE]
+    call disk_load
+
     ; Set VESA mode
     mov ax, 0x4F02                  ; VESA function to set mode
     mov bx, 0x115 | 0x4000          ; Mode 800x600x24-bit
@@ -42,11 +48,6 @@ load_kernel:
     mov eax, ModeInfoBlock
     mov [0x110000], eax
 
-    ; Carica il kernel
-    mov bx, KERNEL_OFFSET           ; Read from disk and store in 0x1000
-    mov dh, 52
-    mov dl, [BOOT_DRIVE]
-    call disk_load
     ret
 
 vesa_fail:

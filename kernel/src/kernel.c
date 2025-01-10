@@ -65,4 +65,5 @@ void start_kernel() {
     fill_screen(0xffff00ff);
     draw_rectangle(100, 100, 100, 100, 0xffffffff);
     draw_text(210, 100, LEFT, "Hello, World", 0xff000000, 1.0, put_pixel);
+    draw_rectangle(250, 100, 100, 100, 0x00000000);
 }
