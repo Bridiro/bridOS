@@ -2,11 +2,6 @@
 # $< = first dependency
 # $^ = all dependencies
 
-# detect all .o files based on their .c source
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h  drivers/*.h cpu/*.h)
-OBJ_FILES = ${addprefix $(BUILD_DIR)/, $(C_SOURCES:.c=.o cpu/interrupt.o)}
-
 # Detect the operating system
 OS := $(shell uname -s)
 
@@ -25,20 +20,32 @@ endif
 
 BUILD_DIR = build
 
+# detect all .o files based on their .c source
+C_SOURCES = $(wildcard kernel/src/*.c drivers/src/*.c cpu/src/*.c kernel/libs/sw-lib-font/src/*c)
+INCLUDES = -Ikernel/inc -Idrivers/inc -Icpu/inc -Ikernel/libs/sw-lib-font/inc
+OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(C_SOURCES)))
+
+vpath %.c kernel/src drivers/src cpu/src kernel/libs/sw-lib-font/src
+
+ASM_SPECIAL_SOURCE = cpu/interrupt.asm
+ASM_SPECIAL_OBJ = $(BUILD_DIR)/interrupt.o
+
+ASM_SOURCES = $(wildcard boot/*.asm cpu/%.asm)
+ASM_BIN_FILES = $(patsubst %.asm,$(BUILD_DIR)/%.bin,$(notdir $(ASM_SOURCES)))
+
+vpath %.asm boot cpu
+
 # First rule is the one executed when no parameters are fed to the Makefile
 all: os-image.bin
 
 $(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)/boot
-	mkdir -p $(BUILD_DIR)/kernel
-	mkdir -p $(BUILD_DIR)/cpu
-	mkdir -p $(BUILD_DIR)/drivers
+	mkdir -p $(BUILD_DIR)
 
 # Notice how dependencies are built as needed
-$(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/boot/kernel_entry.o ${OBJ_FILES}
+$(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel_entry.o ${OBJ_FILES} ${ASM_SPECIAL_OBJ}
 	$(LD) -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
 
-os-image.bin: $(BUILD_DIR)/boot/mbr.bin $(BUILD_DIR)/kernel.bin
+os-image.bin: $(BUILD_DIR)/mbr.bin $(BUILD_DIR)/kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
@@ -48,15 +55,15 @@ echo: os-image.bin
 	xxd $<
 
 # only for debug
-$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/boot/kernel_entry.o ${OBJ_FILES}
+$(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o ${OBJ_FILES} ${ASM_SPECIAL_OBJ}
 	$(LD) -m elf_i386 -o $@ -Ttext 0x1000 $^
 
 debug: os-image.bin $(BUILD_DIR)/kernel.elf
 	qemu-system-x86_64 -s -S -fda os-image.bin -d guest_errors,int &
 	$(GDB) -ex "target remote localhost:1234" -ex "symbol-file $(BUILD_DIR)/kernel.elf"
 
-$(BUILD_DIR)/%.o: %.c ${HEADERS} | $(BUILD_DIR)
-	$(GCC) -Wno-discarded-qualifiers -fno-pie -g -m32 -ffreestanding -c $< -o $@ # -g for debugging
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
+	$(GCC) -Wno-discarded-qualifiers -fno-pie -g -m32 -ffreestanding -c $< -o $@ $(INCLUDES) # -g for debugging
 
 $(BUILD_DIR)/%.o: %.asm | $(BUILD_DIR)
 	nasm $< -f elf -o $@

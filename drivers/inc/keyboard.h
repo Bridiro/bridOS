@@ -1,11 +1,12 @@
-#pragma once
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #include <stdbool.h>
 #include "ports.h"
-#include "../cpu/isr.h"
+#include "isr.h"
 #include "display.h"
-#include "../kernel/util.h"
-#include "../kernel/commands.h"
+#include "util.h"
+#include "commands.h"
 
 #define KEY_ESCAPE          0x1
 #define KEY_SPACE           0x39
@@ -56,3 +57,5 @@ const static char sc_ascii_shifted[] = {'?', '?', '!', '"', 156, '$', '%', '&',
                                         'B', 'N', 'M', ';', ':', '_', '?', '?', '?', ' '};
 
 void init_keyboard();
+
+#endif // KEYBOARD_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UTIL_H
+#define UTIL_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -13,3 +14,5 @@ bool backspace(char s[]);
 void append(char s[], char n);
 int compare_string(char s1[], char s2[]);
 char *string_to_lowercase(char *string);
+
+#endif // UTIL_H

@@ -1,9 +1,10 @@
-#pragma once
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include "ports.h"
 #include <stdint.h>
-#include "../kernel/mem.h"
-#include "../kernel/util.h"
+#include "mem.h"
+#include "util.h"
 
 #define VIDEO_ADDRESS 0xb8000
 #define MAX_ROWS 25
@@ -20,3 +21,5 @@ void print_nl();
 void clear_screen();
 int scroll_ln(int offset);
 void print_backspace();
+
+#endif // DISPLAY_H

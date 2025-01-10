@@ -1,8 +1,9 @@
-#pragma once
+#ifndef MEM_H
+#define MEM_H
 
 #include <stdint.h>
 #include <stddef.h>
-#include "../drivers/display.h"
+#include "display.h"
 #include "util.h"
 #include <stdbool.h>
 
@@ -32,3 +33,5 @@ void print_dynamic_node_size();
 void print_dynamic_mem();
 void *mem_alloc(size_t size);
 void mem_free(void *p);
+
+#endif // MEM_H

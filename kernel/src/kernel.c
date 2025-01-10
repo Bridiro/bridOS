@@ -26,7 +26,9 @@ typedef struct {
     uint8_t reserved[206];
 } ModeInfoBlock;
 
-void put_pixel(ModeInfoBlock* mode_info, int x, int y, uint32_t color) {
+ModeInfoBlock *mode_info = NULL;
+
+void put_pixel(int x, int y, uint32_t color) {
     uint8_t* framebuffer = (uint8_t*)(uintptr_t)mode_info->framebuffer;
 
     uint32_t offset = y * mode_info->pitch + x * 3;
@@ -36,18 +38,18 @@ void put_pixel(ModeInfoBlock* mode_info, int x, int y, uint32_t color) {
     framebuffer[offset + 2] = (color >> 16) & 0xFF;
 }
 
-void draw_rectangle(ModeInfoBlock* mode_info, int x, int y, int w, int h, uint32_t color) {
+void draw_rectangle(int x, int y, int w, int h, uint32_t color) {
     for (int dy = y; dy < y + h; dy++) {
         for (int dx = x; dx < x + w; dx++) {
-            put_pixel(mode_info, dx, dy, color);
+            put_pixel(dx, dy, color);
         }
     }
 }
 
-void fill_screen(ModeInfoBlock* mode_info, uint32_t color) {
+void fill_screen(uint32_t color) {
     for (int y = 0; y < mode_info->height; y++) {
         for (int x = 0; x < mode_info->width; x++) {
-            put_pixel(mode_info, x, y, color);
+            put_pixel(x, y, color);
         }
     }
 }
@@ -58,8 +60,9 @@ void start_kernel() {
     init_keyboard();
     init_dynamic_mem();
 
-    ModeInfoBlock* mode_info = MODE_INFO_BLOCK_ADDRESS;
+    mode_info = MODE_INFO_BLOCK_ADDRESS;
 
-    fill_screen(mode_info, 0xff00ff);
-    draw_rectangle(mode_info, 100, 100, 100, 100, 0xffffff);
+    fill_screen(0xffff00ff);
+    draw_rectangle(100, 100, 100, 100, 0xffffffff);
+    draw_text(210, 100, LEFT, "Hello, World", 0xff000000, 1.0, put_pixel);
 }
