@@ -10,8 +10,8 @@ typedef struct {
     uint16_t window_size;
     uint16_t segment_a, segment_b;
     uint32_t win_func_ptr;
-    uint16_t pitch;          // Bytes per scanline
-    uint16_t width, height;  // Risoluzione
+    uint16_t pitch;
+    uint16_t width, height;
     uint8_t w_char, y_char, planes, bpp, banks;
     uint8_t memory_model, bank_size, image_pages;
     uint8_t reserved0;
@@ -20,26 +20,20 @@ typedef struct {
     uint8_t blue_mask, blue_position;
     uint8_t reserved_mask, reserved_position;
     uint8_t direct_color_attributes;
-    uint32_t framebuffer;    // Indirizzo LFB
+    uint32_t framebuffer;
     uint32_t offscreen_mem_off;
     uint16_t offscreen_mem_size;
     uint8_t reserved[206];
 } ModeInfoBlock;
 
 void put_pixel(ModeInfoBlock* mode_info, int x, int y, uint32_t color) {
-    /*
     uint8_t* framebuffer = (uint8_t*)(uintptr_t)mode_info->framebuffer;
 
-    uint32_t offset = y * mode_info->pitch + x * 4;
+    uint32_t offset = y * mode_info->pitch + x * 3;
 
-    framebuffer[offset + 0] = (color & 0xFF);        // Componente blu
-    framebuffer[offset + 1] = (color >> 8) & 0xFF;  // Componente verde
-    framebuffer[offset + 2] = (color >> 16) & 0xFF; // Componente rosso
-    framebuffer[offset + 3] = (color >> 24) & 0xFF;
-    */
-
-    uint32_t* framebuffer = (uint32_t*)(uintptr_t)mode_info->framebuffer;
-    framebuffer[y * (mode_info->pitch/4) + x] = color;
+    framebuffer[offset + 0] = (color & 0xFF);
+    framebuffer[offset + 1] = (color >> 8) & 0xFF;
+    framebuffer[offset + 2] = (color >> 16) & 0xFF;
 }
 
 void draw_rectangle(ModeInfoBlock* mode_info, int x, int y, int w, int h, uint32_t color) {
@@ -66,6 +60,6 @@ void start_kernel() {
 
     ModeInfoBlock* mode_info = MODE_INFO_BLOCK_ADDRESS;
 
-    fill_screen(mode_info, 0x00ff00ff);
-    draw_rectangle(mode_info, 100, 100, 100, 100, 0xffffffff);
+    fill_screen(mode_info, 0xff00ff);
+    draw_rectangle(mode_info, 100, 100, 100, 100, 0xffffff);
 }

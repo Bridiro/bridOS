@@ -14,10 +14,12 @@ OS := $(shell uname -s)
 ifeq ($(OS), Darwin)
     GCC = x86_64-elf-gcc
     LD  = x86_64-elf-ld
+    GDB = x86_64-elf-gdb
     NASM = nasm
 else
     GCC = x86_64-linux-gnu-gcc
     LD  = x86_64-linux-gnu-ld
+    GDB = gdb
     NASM = nasm
 endif
 
@@ -51,7 +53,7 @@ $(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/boot/kernel_entry.o ${OBJ_FILES}
 
 debug: os-image.bin $(BUILD_DIR)/kernel.elf
 	qemu-system-x86_64 -s -S -fda os-image.bin -d guest_errors,int &
-	gdb -ex "target remote localhost:1234" -ex "symbol-file $(BUILD_DIR)/kernel.elf"
+	$(GDB) -ex "target remote localhost:1234" -ex "symbol-file $(BUILD_DIR)/kernel.elf"
 
 $(BUILD_DIR)/%.o: %.c ${HEADERS} | $(BUILD_DIR)
 	$(GCC) -Wno-discarded-qualifiers -fno-pie -g -m32 -ffreestanding -c $< -o $@ # -g for debugging
