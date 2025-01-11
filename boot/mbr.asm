@@ -45,9 +45,6 @@ load_kernel:
     int 0x10
     jc vesa_fail
 
-    mov eax, ModeInfoBlock
-    mov [0x110000], eax
-
     ret
 
 vesa_fail:
