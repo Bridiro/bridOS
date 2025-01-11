@@ -94,3 +94,46 @@ void print_backspace() {
     set_char_at_video_memory(' ', newCursor);
     set_cursor(newCursor);
 }
+
+/**
+ * NEW FUNCTIONS FOR GRAPHIC MODE
+ */
+struct ModeInfoBlock *mode_info = NULL;
+
+void init_display()
+{
+    mode_info = MODE_INFO_BLOCK_ADDRESS;
+}
+
+void put_pixel(int x, int y, uint32_t color)
+{
+    uint8_t* framebuffer = (uint8_t*)(uintptr_t)mode_info->framebuffer;
+
+    uint32_t offset = y * mode_info->pitch + x * 3;
+
+    framebuffer[offset + 0] = (color & 0xFF);
+    framebuffer[offset + 1] = (color >> 8) & 0xFF;
+    framebuffer[offset + 2] = (color >> 16) & 0xFF;
+}
+
+void draw_rectangle(int x, int y, int w, int h, uint32_t color)
+{
+    for (int dy = y; dy < y + h; dy++)
+    {
+        for (int dx = x; dx < x + w; dx++)
+        {
+            put_pixel(dx, dy, color);
+        }
+    }
+}
+
+void fill_screen(uint32_t color)
+{
+    for (int y = 0; y < mode_info->height; y++)
+    {
+        for (int x = 0; x < mode_info->width; x++)
+        {
+            put_pixel(x, y, color);
+        }
+    }
+}
