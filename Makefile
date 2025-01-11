@@ -24,6 +24,7 @@ BUILD_DIR = build
 C_SOURCES = $(wildcard kernel/src/*.c drivers/src/*.c cpu/src/*.c kernel/libs/sw-lib-font/src/*c)
 INCLUDES = -Ikernel/inc -Idrivers/inc -Icpu/inc -Ikernel/libs/sw-lib-font/inc
 OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(C_SOURCES)))
+OPT_FLAGS = -Os
 
 vpath %.c kernel/src drivers/src cpu/src kernel/libs/sw-lib-font/src
 
@@ -49,7 +50,7 @@ os-image.bin: $(BUILD_DIR)/mbr.bin $(BUILD_DIR)/kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
-	qemu-system-x86_64 -drive file=$<,format=raw,if=floppy -vga virtio
+	qemu-system-i386 -drive file=$<,format=raw,if=floppy -vga virtio
 
 echo: os-image.bin
 	xxd $<
@@ -58,12 +59,13 @@ echo: os-image.bin
 $(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o ${OBJ_FILES} ${ASM_SPECIAL_OBJ}
 	$(LD) -m elf_i386 -o $@ -Ttext 0x1000 $^
 
+debug: OPT_FLAGS = -O0 -g
 debug: os-image.bin $(BUILD_DIR)/kernel.elf
-	qemu-system-x86_64 -s -S -fda os-image.bin -d guest_errors,int &
+	qemu-system-i386 -s -S -fda os-image.bin -d guest_errors,int &
 	$(GDB) -ex "target remote localhost:1234" -ex "symbol-file $(BUILD_DIR)/kernel.elf"
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
-	$(GCC) -Wno-discarded-qualifiers -fno-pie -g -m32 -ffreestanding -c $< -o $@ $(INCLUDES) # -g for debugging
+	$(GCC) -Wno-discarded-qualifiers -fno-pie $(OPT_FLAGS) -m32 -ffreestanding -c $< -o $@ $(INCLUDES) # -g for debugging
 
 $(BUILD_DIR)/%.o: %.asm | $(BUILD_DIR)
 	nasm $< -f elf -o $@
