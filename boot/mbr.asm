@@ -54,13 +54,23 @@ vesa_fail:
 
 [bits 32]
 BEGIN_32BIT:
+    mov eax, cr0          ; Read control register CR0
+    and eax, 0xFFFFFFFB   ; Disable FPU emulation (bit 2 = 0)
+    or eax, 0x2           ; Set co-processors monitoring
+    mov cr0, eax          ; Re-write in CR0
+
+    mov eax, cr4
+    or eax, 0x200         ; Set OSFXSR bit (bit 9) to enable SSE instructions
+    mov cr4, eax
+    fninit                ; Initialize FPU
+    
     call KERNEL_OFFSET ; Give control to the kernel
     jmp $ ; Stay here when the kernel returns control to us (if ever)
 
 
 BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
-MSG_16BIT_MODE db "Started in 16-bit Real Mode", 0
-MSG_32BIT_MODE db "Landed in 32-bit Protected Mode", 0
+MSG_16BIT_MODE db "16-bit Real Mode", 0
+MSG_32BIT_MODE db "32-bit Protected Mode", 0
 MSG_LOAD_KERNEL db "Loading kernel into memory", 0
 MSG_VESA_FAIL db "Failed to set VESA", 0
 

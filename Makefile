@@ -65,7 +65,7 @@ debug: os-image.bin $(BUILD_DIR)/kernel.elf
 	$(GDB) -ex "target remote localhost:1234" -ex "symbol-file $(BUILD_DIR)/kernel.elf"
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
-	$(GCC) -Wno-discarded-qualifiers -fno-pie $(OPT_FLAGS) -m32 -ffreestanding -c $< -o $@ $(INCLUDES) # -g for debugging
+	$(GCC) -Wno-discarded-qualifiers -fno-pie $(OPT_FLAGS) -m32 -msoft-float -mfpmath=sse -msse -msse2 -mno-red-zone -ffreestanding -c $< -o $@ $(INCLUDES) # -g for debugging
 
 $(BUILD_DIR)/%.o: %.asm | $(BUILD_DIR)
 	nasm $< -f elf -o $@
