@@ -29,8 +29,8 @@ load_kernel:
 
     ; Load kernel
     mov bx, KERNEL_OFFSET           ; Read from disk and store in 0x1000
-    mov dh, 54
-    mov dl, [BOOT_DRIVE]
+    mov dh, 54                      ; Read 54 sectors (for some reason is the limit)
+    mov dl, [BOOT_DRIVE]            ; Read from this disk
     call disk_load
 
     ; Set VESA mode
