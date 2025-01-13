@@ -1,13 +1,19 @@
 #include "keyboard.h"
+#include "ports.h"
+#include "isr.h"
+#include "display.h"
+#include "util.h"
+#include "commands.h"
+#include <stdint.h>
 
-static char key_buffer[256];
+static char key_buffer[1024];
 
 static bool is_shifted = false;
 static bool is_alt = false;
 static bool is_ctrl = false;
 static bool is_altgr = false;
 
-static char *curmap = sc_ascii;
+static char *curmap = (char*)(uintptr_t)sc_ascii;
 
 static void keyboard_callback(registers_t *regs) {
     uint8_t scancode = port_byte_in(0x60);
@@ -17,28 +23,31 @@ static void keyboard_callback(registers_t *regs) {
     else if(is_shifted==0)
         curmap = sc_ascii;
 
-    if (scancode == KEY_LSHIFT || scancode == KEY_RSHIFT) {
+    switch(scancode) {
+    case KEY_LSHIFT:
+    case KEY_RSHIFT:
         is_shifted = 1;
         return;
-    } else if (scancode == KEY_LSHIFT_RELEASE || scancode == KEY_RSHIFT_RELEASE) {
+    case KEY_LSHIFT_RELEASE:
+    case KEY_RSHIFT_RELEASE:
         is_shifted = 0;
         return;
-    } else if (scancode == KEY_ALT) {
+    case KEY_ALT:
         is_alt = 1;
         return;
-    } else if (scancode == KEY_ALT_RELEASE) {
+    case KEY_ALT_RELEASE:
         is_alt = 0;
         return;
-    } else if (scancode == KEY_CTRL) {
+    case KEY_CTRL:
         is_ctrl = 1;
         return;
-    } else if (scancode == KEY_CTRL_RELEASE) {
+    case KEY_CTRL_RELEASE:
         is_ctrl = 0;
         return;
-    } else if (scancode == KEY_ALTGR) {
+    case KEY_ALTGR:
         is_altgr = 1;
         return;
-    } else if (scancode == KEY_ALTGR_RELEASE) {
+    case KEY_ALTGR_RELEASE:
         is_altgr = 0;
         return;
     }
@@ -67,7 +76,7 @@ static void keyboard_callback(registers_t *regs) {
 
         case KEY_ENTER:
             print_nl();
-            execute_command(key_buffer);
+            // execute_command(key_buffer);
             key_buffer[0] = '\0';
             break;
 

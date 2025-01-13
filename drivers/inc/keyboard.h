@@ -2,11 +2,6 @@
 #define KEYBOARD_H
 
 #include <stdbool.h>
-#include "ports.h"
-#include "isr.h"
-#include "display.h"
-#include "util.h"
-#include "commands.h"
 
 #define KEY_ESCAPE          0x1
 #define KEY_SPACE           0x39
