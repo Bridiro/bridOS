@@ -8,7 +8,7 @@
 #include "keyboard.h"
 #include "util.h"
 #include "mem.h"
-#include "text.h"
+#include "libfont.h"
 
 void start_kernel();
 

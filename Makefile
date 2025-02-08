@@ -21,12 +21,12 @@ endif
 BUILD_DIR = build
 
 # detect all .o files based on their .c source
-C_SOURCES = $(wildcard kernel/src/*.c drivers/src/*.c cpu/src/*.c kernel/libs/sw-lib-font/src/*c)
-INCLUDES = -Ikernel/inc -Idrivers/inc -Icpu/inc -Ikernel/libs/sw-lib-font/inc
+C_SOURCES = $(wildcard kernel/src/*.c drivers/src/*.c cpu/src/*.c kernel/libs/sw-libfont/src/*c)
+INCLUDES = -Ikernel/inc -Idrivers/inc -Icpu/inc -Ikernel/libs/sw-libfont/inc
 OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(C_SOURCES)))
 OPT_FLAGS = -Os
 
-vpath %.c kernel/src drivers/src cpu/src kernel/libs/sw-lib-font/src
+vpath %.c kernel/src drivers/src cpu/src kernel/libs/sw-libfont/src
 
 ASM_SPECIAL_SOURCE = cpu/interrupt.asm
 ASM_SPECIAL_OBJ = $(BUILD_DIR)/interrupt.o
