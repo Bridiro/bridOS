@@ -5,7 +5,7 @@
 void start_kernel() {
     isr_install();
     asm volatile("sti");
-    init_timer(100000);
+    init_timer(1000);
     init_keyboard();
     init_dynamic_mem();
     init_display();
