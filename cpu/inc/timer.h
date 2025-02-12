@@ -1,11 +1,9 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "util.h"
-#include "display.h"
-#include "ports.h"
-#include "isr.h"
+#include <stdint.h>
 
 void init_timer(uint32_t freq);
+void sleep(uint32_t ms);
 
 #endif // TIMER_H

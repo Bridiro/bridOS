@@ -100,13 +100,19 @@ void print_backspace() {
  */
 struct ModeInfoBlock *mode_info = NULL;
 
-void init_display()
-{
+void init_display() {
     mode_info = MODE_INFO_BLOCK_ADDRESS;
 }
 
-void put_pixel(int x, int y, uint32_t color)
-{
+uint16_t get_screen_width() {
+    return mode_info->width;
+}
+
+uint16_t get_screen_height() {
+    return mode_info->height;
+}
+
+void put_pixel(int x, int y, uint32_t color) {
     uint8_t* framebuffer = (uint8_t*)(uintptr_t)mode_info->framebuffer;
 
     uint32_t offset = y * mode_info->pitch + x * 3;
@@ -116,23 +122,17 @@ void put_pixel(int x, int y, uint32_t color)
     framebuffer[offset + 2] = (color >> 16) & 0xFF;
 }
 
-void draw_rectangle(int x, int y, int w, int h, uint32_t color)
-{
-    for (int dy = y; dy < y + h; dy++)
-    {
-        for (int dx = x; dx < x + w; dx++)
-        {
+void draw_rectangle(int x, int y, int w, int h, uint32_t color) {
+    for (int dy = y; dy < y + h; dy++) {
+        for (int dx = x; dx < x + w; dx++) {
             put_pixel(dx, dy, color);
         }
     }
 }
 
-void fill_screen(uint32_t color)
-{
-    for (int y = 0; y < mode_info->height; y++)
-    {
-        for (int x = 0; x < mode_info->width; x++)
-        {
+void fill_screen(uint32_t color) {
+    for (int y = 0; y < mode_info->height; y++) {
+        for (int x = 0; x < mode_info->width; x++) {
             put_pixel(x, y, color);
         }
     }

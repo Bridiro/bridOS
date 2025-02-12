@@ -1,15 +1,19 @@
 #include "timer.h"
+#include "ports.h"
+#include "isr.h"
+
 
 uint32_t tick = 0;
 
 static void timer_callback(registers_t *regs) {
     tick++;
-    print_string("Tick: ");
+}
 
-    char tick_ascii[256];
-    int_to_string(tick, tick_ascii);
-    print_string(tick_ascii);
-    print_nl();
+void sleep(uint32_t ms) {
+    uint32_t end = tick + ms;
+    while (tick < end) {
+        asm volatile("hlt"); // Save CPU while waiting
+    }
 }
 
 void init_timer(uint32_t freq) {

@@ -1,4 +1,8 @@
 #include "isr.h"
+#include "idt.h"
+#include "display.h"
+#include "ports.h"
+#include "util.h"
 
 isr_t interrupt_handlers[256];
 
