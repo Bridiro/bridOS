@@ -1,5 +1,5 @@
 [org 0x7c00]
-KERNEL_OFFSET equ 0x8000 ; The same one we used when linking the kernel
+KERNEL_OFFSET equ 0x7e00       ; The same one we used when linking the kernel
 
 ModeInfoBlock equ 0x6000   ; Buffer for info on VESA mode
 
@@ -28,8 +28,8 @@ load_kernel:
     call print16_nl
 
     ; Load kernel
-    mov bx, KERNEL_OFFSET           ; Read from disk and store in 0x1000
-    mov dh, 64                      ; Read 54 sectors (for some reason is the limit)
+    mov bx, KERNEL_OFFSET           ; Read from disk and store in 0x7e00
+    mov dh, 64                      ; Read 64 sectors
     mov dl, [BOOT_DRIVE]            ; Read from this disk
     call disk_load
 

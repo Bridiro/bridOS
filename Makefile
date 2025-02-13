@@ -44,7 +44,7 @@ $(BUILD_DIR):
 
 # Notice how dependencies are built as needed
 $(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel_entry.o ${OBJ_FILES} ${ASM_SPECIAL_OBJ}
-	$(LD) -m elf_i386 -o $@ -Ttext 0x8000 $^ --oformat binary
+	$(LD) -m elf_i386 -o $@ -Ttext 0x7e00 $^ --oformat binary
 
 os-image.bin: $(BUILD_DIR)/mbr.bin $(BUILD_DIR)/kernel.bin
 	cat $^ > $@
@@ -57,7 +57,7 @@ echo: os-image.bin
 
 # only for debug
 $(BUILD_DIR)/kernel.elf: $(BUILD_DIR)/kernel_entry.o ${OBJ_FILES} ${ASM_SPECIAL_OBJ}
-	$(LD) -m elf_i386 -o $@ -Ttext 0x8000 $^
+	$(LD) -m elf_i386 -o $@ -Ttext 0x7e00 $^
 
 debug: OPT_FLAGS = -O0 -g
 debug: os-image.bin $(BUILD_DIR)/kernel.elf
