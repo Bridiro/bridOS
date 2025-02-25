@@ -22,7 +22,7 @@ BUILD_DIR = build
 
 # detect all .o files based on their .c source
 C_SOURCES = $(wildcard kernel/src/*.c drivers/src/*.c cpu/src/*.c kernel/libs/sw-libfont/src/*c)
-INCLUDES = -Ikernel/inc -Idrivers/inc -Icpu/inc -Ikernel/libs/sw-libfont/inc
+INCLUDES = -Ikernel/inc -Idrivers/inc -Icpu/inc -Ikernel/libs/sw-libfont/include
 OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(C_SOURCES)))
 OPT_FLAGS = -Os
 

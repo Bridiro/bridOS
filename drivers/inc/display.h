@@ -53,6 +53,7 @@ void init_display();
 uint16_t get_screen_width();
 uint16_t get_screen_height();
 void put_pixel(int x, int y, uint32_t color);
+void put_line(int x, int y, int lenght, uint32_t color);
 void draw_rectangle(int x, int y, int w, int h, uint32_t color);
 void fill_screen(uint32_t color);
 

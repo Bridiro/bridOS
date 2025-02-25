@@ -122,6 +122,12 @@ void put_pixel(int x, int y, uint32_t color) {
     framebuffer[offset + 2] = (color >> 16) & 0xFF;
 }
 
+void put_line(int x, int y, int lenght, uint32_t color) {
+    for (int i=0; i<lenght; i++) {
+        put_pixel(x+i, y, color);
+    }
+}
+
 void draw_rectangle(int x, int y, int w, int h, uint32_t color) {
     for (int dy = y; dy < y + h; dy++) {
         for (int dx = x; dx < x + w; dx++) {
