@@ -33,7 +33,7 @@ void start_kernel() {
         fill_screen(0xffa3a3a3);
         draw_rectangle(x_0, 100, 100, 100, 0xffffffff);
         draw_rectangle(100, y_1, 100, 100, 0x00000000);
-        draw_text(210, 100, LEFT, "BridOS", 0xff000000, 3, put_line);
+        draw_text(210, 100, LEFT, "BridOS", 0xff000000, 150, put_line);
         sleep(100);
     }
 }
