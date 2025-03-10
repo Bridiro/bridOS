@@ -22,3 +22,5 @@ I'm following some tutorials and a lot of documentation.
 My e-mail: ale.bridi15@gmail.com
 
 You can also open Issues or Pull-Request and I'll review it as soon as I can.
+
+# This OS is shit
